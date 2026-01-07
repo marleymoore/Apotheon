@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e44ca3f6bb118c440ab0a61d1e443f9f, type: 3}
+  m_Name: OMGHI
+  m_EditorClassIdentifier: 
+  name: 
+  description: 
+  type1: 0
+  type2: 0
+  frontSprite: {fileID: 0}
+  backSprite: {fileID: 0}
+  maxHp: 0
+  attack: 0
+  defence: 0
+  spAttack: 0
+  spDefence: 0
+  speed: 0
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: c519a72db444deb4da926b2a163726db, type: 2}
+    level: 0

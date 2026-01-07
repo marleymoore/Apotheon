@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e44ca3f6bb118c440ab0a61d1e443f9f, type: 3}
+  m_Name: Monkey
+  m_EditorClassIdentifier: 
+  name: awd
+  description: 
+  type1: 1
+  type2: 0
+  frontSprite: {fileID: 21300000, guid: 36cf59e76b4bd804cb8bdf26c34f3f71, type: 3}
+  backSprite: {fileID: 21300000, guid: f9b7f18a76b494e498525b27e224a2fb, type: 3}
+  maxHp: 3
+  attack: 3
+  defence: 3
+  spAttack: 3
+  spDefence: 3
+  speed: 3
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: c519a72db444deb4da926b2a163726db, type: 2}
+    level: 0
