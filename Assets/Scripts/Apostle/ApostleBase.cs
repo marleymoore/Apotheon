@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Apostle", menuName = "Apostle/Create new")]
@@ -74,3 +75,28 @@ public enum ApostleType
     Mind,
     Colour
 }
+
+public class TypeChart
+{
+    static float[][] chart =
+    {
+        //                    BON PRM IRN MND CLR 
+        /*BON*/ new float [] { 1f, 1f, 1f, 1f, 1f },
+        /*PRM*/ new float [] { 2f, 0.5f, 2f, 0.5f, 0.5f },
+        /*IRN*/ new float [] { 2f, 1f, 0.5f, 1f, 1f },
+        /*MND*/ new float [] { 1f, 2f, 1f, 1f, 0.5f },
+        /*CLR*/ new float [] { 1f, 0.5f, 1f, 2f, 2f },
+    };
+
+    public static float TypeEffectiveness(ApostleType attackType, ApostleType defenseType)
+    {
+        int row = (int)attackType;
+        int col = (int)defenseType;
+
+        return chart[row][col];
+    }
+} 
+
+
+
+

@@ -7,16 +7,19 @@ using Random = UnityEngine.Random;
 
 public class PlayerController : MonoBehaviour
 {
+
+    
     //player movement
     public Rigidbody2D pBody;
     public float pMoveSpeed = 1f;
     Vector2 pDirection;
-    private EncounterList currentEncounterList;
+    public EncounterList currentEncounterList;
     //[SerializeField] bool encounterEnable = false;
 
     private float interval = 2f;
 
     //private bool isMoving = false;
+
 
     // Update is called once per frame
     void Update()
@@ -25,6 +28,7 @@ public class PlayerController : MonoBehaviour
         PlayerMove();
      
     }
+
 
     void PlayerMove()
     {
@@ -82,6 +86,8 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(interval);
 
         Encounter encounter = new Encounter(Random.Range(1, 10), currentEncounterList);
+
+
         EventBus.Raise(encounter);
         
     }

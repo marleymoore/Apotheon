@@ -13,8 +13,12 @@ public class BattleManager : MonoBehaviour
     [SerializeField] BattleHud playerHud;
     [SerializeField] BattleHud enemyHud;
     [SerializeField] BattleDialogue battleDialogue;
+    [SerializeField] Camera playerCamera;
+    [SerializeField] Camera battleCamera;
 
     ButtonHandler buttonHandler;
+    EncounterList encounterList;
+    [SerializeField] PlayerController playerController;
 
     bool inBattle = false;
 
@@ -23,26 +27,32 @@ public class BattleManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //StartCoroutine(SetupBattle());
+        
 
         EventBus.Subscribe<Encounter>(SetupBattle);
-
+        battleCamera.gameObject.SetActive(false);
        
     }
 
     void SetupBattle(Encounter eventData)
     {
-        buttonHandler = new ButtonHandler();
 
+        inBattle = true;
+
+        buttonHandler = new ButtonHandler();
+        encounterList = playerController.currentEncounterList; //retrieves the current encounter box that player has collided with
+
+        GameState gameState = new GameState(inBattle, playerCamera, battleCamera, playerController);
+        EventBus.Raise(gameState);
 
         ApostleBase wildApostle = eventData.WildApostle;
        
-
+        //change this to players party apostle!!! when its done)
         playerUnit.SetUp(wildApostle, 5, true);
         playerHud.SetHudData(playerUnit.Apostle);
 
        
-        enemyUnit.SetUp(wildApostle, 5, false);
+        enemyUnit.SetUp(wildApostle, encounterList.ApostleLevelCalc(encounterList.MinLevel, encounterList.MaxLevel), false);
         enemyHud.SetHudData(enemyUnit.Apostle);
         
 
@@ -61,9 +71,9 @@ public class BattleManager : MonoBehaviour
     {
         yield return (battleDialogue.TypeDialogue($"{enemyUnit.Apostle.ApostleBase.name} confronts you..."));
         
-        yield return new WaitForSeconds(1f);
+        
        
-        inBattle = true;
+        
         PlayerAction();
 
         
@@ -143,7 +153,7 @@ public class BattleManager : MonoBehaviour
         var move = playerUnit.Apostle.Moves[buttonHandler.selectedButton];
         yield return battleDialogue.TypeDialogue($"{playerUnit.Apostle.ApostleBase.Name} used {move.Base.Name}");
 
-        yield return new WaitForSeconds(1f);
+        
 
         //bool isFainted = enemyUnit.apostle.TakeDamage(move, playerUnit.apostle);
         //enemyHud.UpdateHPBar();
@@ -151,7 +161,7 @@ public class BattleManager : MonoBehaviour
         TakeDamage damageTaken = new TakeDamage(move, playerUnit.Apostle, enemyUnit.Apostle);
         EventBus.Raise(damageTaken);
 
-        if (enemyUnit.Apostle.CurrentHP == 0)
+        if (enemyUnit.Apostle.CurrentHP <= 0)
         {
             yield return battleDialogue.TypeDialogue($"{enemyUnit.Apostle.ApostleBase.Name} FUCKING DIED GRAHHHHHH");
         }
@@ -169,7 +179,7 @@ public class BattleManager : MonoBehaviour
         var move = enemyUnit.Apostle.RandomMove();
         yield return battleDialogue.TypeDialogue($"{enemyUnit.Apostle.ApostleBase.Name} used {move.Base.Name}");
 
-        yield return new WaitForSeconds(1f);
+       
 
         //bool isFainted = playerUnit.apostle.TakeDamage(move, playerUnit.apostle);
 
@@ -190,10 +200,13 @@ public class BattleManager : MonoBehaviour
     }
     void Flee()
     {
-
+        Debug.Log("hello");
+        inBattle = false;
+        GameState gameState = new GameState(inBattle, playerCamera, battleCamera, playerController);
+        EventBus.Raise(gameState);
     }
 
-    void EnemyMove()
+    void EndBattle()
     {
 
     }
@@ -206,7 +219,7 @@ public class BattleManager : MonoBehaviour
             buttonHandler.MenuNavigation(buttonHandler.buttonList);
             //Debug.Log(buttonHandler.buttonList.ToString());
             
-            battleDialogue.MoveDescription(buttonHandler.selectedButton, playerUnit.Apostle.Moves[buttonHandler.selectedButton]);
+           // battleDialogue.MoveDescription(buttonHandler.selectedButton, playerUnit.Apostle.Moves[buttonHandler.selectedButton]);
 
         }
 

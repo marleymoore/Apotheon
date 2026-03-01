@@ -15,6 +15,6 @@ MonoBehaviour:
   name: MegaBoner
   description: 
   type: 0
-  power: 0
-  accuracy: 0
+  power: 20
+  accuracy: 100
   uniqueMove: 0

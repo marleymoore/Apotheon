@@ -6,8 +6,12 @@ using UnityEngine.UI;
 public class EncounterList : MonoBehaviour
 {
     [SerializeField] List<ApostleBase> wildApostles;
+    [SerializeField] int minLevel;
+    [SerializeField] int maxLevel;
+    int finalLevel;
 
-
+    public int MinLevel { get { return minLevel; } }
+    public int MaxLevel { get { return maxLevel; } }
 
     /*APOSTLE LIST:
      * 
@@ -23,6 +27,14 @@ public class EncounterList : MonoBehaviour
         
         return chosenApostle;
         
+    }
+
+    public int ApostleLevelCalc(int minParam, int maxParam)
+    {
+        minParam = MinLevel;
+        maxParam = MaxLevel;
+        finalLevel = Random.Range(minParam, maxParam);
+        return finalLevel;
     }
 
   // public ApostleBase EncounteredApostle()

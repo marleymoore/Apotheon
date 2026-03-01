@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class BattleDialogue : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI dialogueText;
-    [SerializeField] int lettersPerSecond;
+    [SerializeField] float lettersPerSecond;
 
     [SerializeField] GameObject actionSelector;
     [SerializeField] GameObject moveSelector;
@@ -33,6 +33,7 @@ public class BattleDialogue : MonoBehaviour
             dialogueText.text += letter;
             yield return new WaitForSeconds(1 / lettersPerSecond);
         }
+        yield return new WaitForSeconds(1f);
     }
 
     public void EnableActionSelector(bool enable)
