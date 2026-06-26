@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a164ee44c6edf8f42aade9ba50e488b8, type: 3}
-  m_Name: MegaBoner
+  m_Name: Slam
   m_EditorClassIdentifier: 
-  name: MegaBoner
+  name: Slam
   description: 
-  type: 0
-  power: 20
-  accuracy: 100
+  type: 2
+  power: 10
+  accuracy: 500
   uniqueMove: 0
+  isSpecial: 0

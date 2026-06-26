@@ -9,7 +9,7 @@ public class Encounter : EventData
 
     EncounterList EncounterList;
 
-    public ApostleBase WildApostle { get; private set; }
+    public Apostle WildApostle { get; private set; }
     // Start is called before the first frame update
 
 
@@ -22,7 +22,7 @@ public class Encounter : EventData
     public Encounter(int eRate, EncounterList encounterList)
     {
         this.EncounterList = encounterList;
-        List<ApostleBase> encounters = new List<ApostleBase>();
+        List<Apostle> encounters = new List<Apostle>();
 
 
         if (eRate <= 10)

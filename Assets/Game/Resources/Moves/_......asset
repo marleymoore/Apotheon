@@ -18,3 +18,4 @@ MonoBehaviour:
   power: 0
   accuracy: 0
   uniqueMove: 0
+  isSpecial: 1

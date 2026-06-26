@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e44ca3f6bb118c440ab0a61d1e443f9f, type: 3}
-  m_Name: OMGHI
+  m_Name: PlayerApostle
   m_EditorClassIdentifier: 
   name: 
   description: 
@@ -24,6 +24,4 @@ MonoBehaviour:
   spAttack: 0
   spDefence: 0
   speed: 0
-  learnableMoves:
-  - moveBase: {fileID: 11400000, guid: c519a72db444deb4da926b2a163726db, type: 2}
-    level: 0
+  learnableMoves: []

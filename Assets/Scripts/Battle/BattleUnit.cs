@@ -12,25 +12,27 @@ public class BattleUnit : MonoBehaviour
 
     //EncounterList encounterList;
 
-    public void SetUp(ApostleBase encounteredApostle, int level, bool isPlayerUnit)
+    public void SetUp(Apostle encounteredApostle, bool isPlayerUnit, int level)
     {
 
 
         //encounterList = GetComponent<EncounterList>();
 
-
-       // encounteredApostle = encounterList.wildApostle;
-        Apostle = new Apostle(encounteredApostle, level);
+        Apostle = encounteredApostle;
+       
+        // encounteredApostle = encounterList.wildApostle;
+        
        // isPlayerUnit = true ? GetComponent<Image>().sprite = apostle.ApostleBase.BackSprite : GetComponent<Image>().sprite = apostle.ApostleBase.FrontSprite;
 
         if(isPlayerUnit == true)
         {
             GetComponent<Image>().sprite = Apostle.ApostleBase.BackSprite;
+            
         }
         else
         {
             GetComponent<Image>().sprite = Apostle.ApostleBase.FrontSprite;
-
+            
         }
 
         // if (isPlayerUnit)
@@ -40,4 +42,6 @@ public class BattleUnit : MonoBehaviour
 
         //isPlayerUnit = true ? apostle.ApostleBase.BackSprite : apostle.ApostleBase.FrontSprite;
     }
+
+    
 }

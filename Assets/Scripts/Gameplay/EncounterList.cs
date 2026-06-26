@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class EncounterList : MonoBehaviour
 {
-    [SerializeField] List<ApostleBase> wildApostles;
+    [SerializeField] List<Apostle> wildApostles;
     [SerializeField] int minLevel;
     [SerializeField] int maxLevel;
     int finalLevel;
@@ -17,14 +17,14 @@ public class EncounterList : MonoBehaviour
      * 
      * Returns a random apostle from within the list given in the inspector
      */
-   public ApostleBase GetRandomApostle(List<ApostleBase> list)
+   public Apostle GetRandomApostle(List<Apostle> list)
    {
 
         list = wildApostles;
         int randomIndex = Random.Range(0, list.Count);
-        ApostleBase chosenApostle = wildApostles[randomIndex];
-        Debug.Log(chosenApostle);
-        
+        Apostle chosenApostle = wildApostles[randomIndex];
+        //Debug.Log(chosenApostle);
+        chosenApostle.Init();
         return chosenApostle;
         
     }

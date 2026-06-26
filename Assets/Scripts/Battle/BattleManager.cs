@@ -18,7 +18,9 @@ public class BattleManager : MonoBehaviour
 
     ButtonHandler buttonHandler;
     EncounterList encounterList;
-    [SerializeField] PlayerController playerController;
+    [SerializeField] private PlayerApostles pApostle;
+    [SerializeField] private PlayerController playerController;
+    bool playerMoveFirst;
 
     bool inBattle = false;
 
@@ -42,17 +44,23 @@ public class BattleManager : MonoBehaviour
         buttonHandler = new ButtonHandler();
         encounterList = playerController.currentEncounterList; //retrieves the current encounter box that player has collided with
 
+
         GameState gameState = new GameState(inBattle, playerCamera, battleCamera, playerController);
         EventBus.Raise(gameState);
+        
 
-        ApostleBase wildApostle = eventData.WildApostle;
-       
+        Apostle wildApostle = eventData.WildApostle;
+        Apostle playerApostle = pApostle.GetApostle();
+
+        int enemyLevel = encounterList.ApostleLevelCalc(encounterList.MinLevel, encounterList.MaxLevel);
+
+
         //change this to players party apostle!!! when its done)
-        playerUnit.SetUp(wildApostle, 5, true);
+        playerUnit.SetUp(playerApostle, true, playerApostle.Level);
         playerHud.SetHudData(playerUnit.Apostle);
 
        
-        enemyUnit.SetUp(wildApostle, encounterList.ApostleLevelCalc(encounterList.MinLevel, encounterList.MaxLevel), false);
+        enemyUnit.SetUp(wildApostle, false, enemyLevel);
         enemyHud.SetHudData(enemyUnit.Apostle);
         
 
@@ -70,9 +78,9 @@ public class BattleManager : MonoBehaviour
     IEnumerator BattleStart()
     {
         yield return (battleDialogue.TypeDialogue($"{enemyUnit.Apostle.ApostleBase.name} confronts you..."));
-        
-        
-       
+
+
+
         
         PlayerAction();
 
@@ -138,8 +146,19 @@ public class BattleManager : MonoBehaviour
     }
 
     void SelectMove()
-    {
-        StartCoroutine(PerformPlayerMove());
+    { 
+
+        if(playerUnit.Apostle.Speed > enemyUnit.Apostle.Speed)
+        {
+            playerMoveFirst = true;
+            StartCoroutine(PerformPlayerMove());
+        }
+        else
+        {
+            playerMoveFirst = false;
+            StartCoroutine(PerformEnemyMove());
+        }
+       // StartCoroutine(playerUnit.Apostle.Speed >= enemyUnit.Apostle.Speed ? PerformPlayerMove() : PerformEnemyMove());
     }
 
     IEnumerator PerformPlayerMove()
@@ -148,6 +167,7 @@ public class BattleManager : MonoBehaviour
 
         battleDialogue.EnableMoveSelector(false);
         battleDialogue.EnableDialogueText(true);
+        buttonHandler.ButtonReset();
 
 
         var move = playerUnit.Apostle.Moves[buttonHandler.selectedButton];
@@ -163,7 +183,9 @@ public class BattleManager : MonoBehaviour
 
         if (enemyUnit.Apostle.CurrentHP <= 0)
         {
-            yield return battleDialogue.TypeDialogue($"{enemyUnit.Apostle.ApostleBase.Name} FUCKING DIED GRAHHHHHH");
+            yield return battleDialogue.TypeDialogue($"{enemyUnit.Apostle.ApostleBase.Name} DIED GRAHHHHHH");
+            yield return (2);
+            EndBattle();
         }
         else
         {
@@ -186,11 +208,69 @@ public class BattleManager : MonoBehaviour
         TakeDamage damageTaken = new TakeDamage(move, enemyUnit.Apostle, playerUnit.Apostle);
         EventBus.Raise(damageTaken);
 
+
         //playerHud.UpdateHPBar();
 
         if (playerUnit.Apostle.CurrentHP <= 0)
         {
-            yield return battleDialogue.TypeDialogue($"{playerUnit.Apostle.ApostleBase.Name} FUCKING DIED GRAHHHHHH");
+            
+            yield return battleDialogue.TypeDialogue($"{playerUnit.Apostle.ApostleBase.Name} DIED GRAHHHHHH");
+            yield return(2);
+            Apostle nextApostle = pApostle.GetApostle();
+            if (nextApostle != null)
+            {
+                playerUnit.SetUp(nextApostle, true, nextApostle.Level);
+                playerHud.SetHudData(playerUnit.Apostle);
+
+                PlayerAction();
+                
+            }
+            else 
+            {
+                EndBattle();
+            }
+            
+        }
+        else
+        {
+            if (playerMoveFirst == false)
+            {
+                StartCoroutine(PlayerMoveSecond());
+                buttonHandler.ButtonReset();
+                yield return battleDialogue.TypeDialogue($"{playerUnit.Apostle.ApostleBase.Name} used {move.Base.Name}");
+                PlayerAction();
+                buttonHandler.ButtonReset();
+            }
+            
+         
+        }
+    }
+
+    IEnumerator PlayerMoveSecond()
+    {
+        state = BattleState.Busy;
+
+        battleDialogue.EnableMoveSelector(false);
+        battleDialogue.EnableDialogueText(true);
+        buttonHandler.ButtonReset();
+
+
+        var move = playerUnit.Apostle.Moves[buttonHandler.selectedButton];
+        yield return battleDialogue.TypeDialogue($"{playerUnit.Apostle.ApostleBase.Name} used {move.Base.Name}");
+
+
+
+        //bool isFainted = enemyUnit.apostle.TakeDamage(move, playerUnit.apostle);
+        //enemyHud.UpdateHPBar();
+
+        TakeDamage damageTaken = new TakeDamage(move, playerUnit.Apostle, enemyUnit.Apostle);
+        EventBus.Raise(damageTaken);
+
+        if (enemyUnit.Apostle.CurrentHP <= 0)
+        {
+            yield return battleDialogue.TypeDialogue($"{enemyUnit.Apostle.ApostleBase.Name} DIED GRAHHHHHH");
+            yield return (2);
+            EndBattle();
         }
         else
         {
@@ -204,41 +284,47 @@ public class BattleManager : MonoBehaviour
         inBattle = false;
         GameState gameState = new GameState(inBattle, playerCamera, battleCamera, playerController);
         EventBus.Raise(gameState);
+        
     }
 
     void EndBattle()
     {
-
+        inBattle = false;
+        GameState gameState = new GameState(inBattle, playerCamera, battleCamera, playerController);
+        EventBus.Raise(gameState);
     }
 
     private void Update()
     {
+        //turn this into a coroutine rather than constantly calling it
         if (inBattle == true)
         {
            
             buttonHandler.MenuNavigation(buttonHandler.buttonList);
-            //Debug.Log(buttonHandler.buttonList.ToString());
+            //Debug.Log("hello");
             
            // battleDialogue.MoveDescription(buttonHandler.selectedButton, playerUnit.Apostle.Moves[buttonHandler.selectedButton]);
-
+    
         }
-
+    
     }
 
-  // private void MenuNavigation()
-  // {
-  //     if (Input.GetKeyDown(KeyCode.DownArrow))
-  //     {
-  //         buttonHandler.MoveToNextButton();
-  //     }
-  //     else if (Input.GetKeyDown(KeyCode.UpArrow))
-  //     {
-  //         buttonHandler.PreviousButton();
-  //     }
-  //
-  //     if (Input.GetKeyDown(KeyCode.Space))
-  //     {
-  //         buttonHandler.buttonList[buttonHandler.selectedButton].action();
-  //     }
-  // }
+
+        // private void MenuNavigation()
+        // {
+        //     if (Input.GetKeyDown(KeyCode.DownArrow))
+        //     {
+        //         buttonHandler.MoveToNextButton();
+        //     }
+        //     else if (Input.GetKeyDown(KeyCode.UpArrow))
+        //     {
+        //         buttonHandler.PreviousButton();
+        //     }
+        //
+        //     if (Input.GetKeyDown(KeyCode.Space))
+        //     {
+        //         buttonHandler.buttonList[buttonHandler.selectedButton].action();
+        //     }
+        // }
+    
 }

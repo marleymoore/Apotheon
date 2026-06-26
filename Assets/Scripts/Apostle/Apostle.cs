@@ -10,20 +10,21 @@ using UnityEngine;
 public class Apostle
 {
 
- //[SerializeField] ApostleBase apostleBase;
- //[SerializeField] int level;
+    [SerializeField] ApostleBase apostleBase;
+    [SerializeField] int level;
+    [SerializeField] bool godApostle = false;
 
-  
+
     public int CurrentHP {  get; set; }
-    public ApostleBase ApostleBase { get; set; }
-    public int Level { get; set; }
+    public ApostleBase ApostleBase { get { return apostleBase; } }
+    public int Level { get { return level; } }
 
     public List<Move> Moves { get; set; }
 
-    public Apostle(ApostleBase aBase, int aLevel)
+    public void Init()
     {
-        ApostleBase = aBase;
-        Level = aLevel;
+        //ApostleBase = aBase;
+        //Level = aLevel;
         CurrentHP = MaxHp;
 
         Moves = new List<Move>();

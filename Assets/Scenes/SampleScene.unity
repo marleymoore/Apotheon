@@ -2775,6 +2775,7 @@ MonoBehaviour:
   battleDialogue: {fileID: 2106494977}
   playerCamera: {fileID: 519420031}
   battleCamera: {fileID: 1260212785}
+  pApostle: {fileID: 1927870364}
   playerController: {fileID: 1927870358}
 --- !u!1 &1128402032
 GameObject:
@@ -3688,7 +3689,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wildApostles:
-  - {fileID: 11400000, guid: 85c9e6af725b258469c37775f53acd41, type: 2}
+  - apostleBase: {fileID: 11400000, guid: 85c9e6af725b258469c37775f53acd41, type: 2}
+    level: 2
+    godApostle: 0
+  - apostleBase: {fileID: 11400000, guid: bf66142d2622f4e4a9b02a028f8f1d46, type: 2}
+    level: 2
+    godApostle: 0
+  - apostleBase: {fileID: 11400000, guid: cc8656d8ef26bfb4984b91a65f7e37ea, type: 2}
+    level: 2
+    godApostle: 0
   minLevel: 6
   maxLevel: 10
 --- !u!50 &1508899201
@@ -5074,6 +5083,7 @@ GameObject:
   - component: {fileID: 1927870358}
   - component: {fileID: 1927870362}
   - component: {fileID: 1927870363}
+  - component: {fileID: 1927870364}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -5279,6 +5289,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.37503743, y: 0.82844174}
   m_EdgeRadius: 0
+--- !u!114 &1927870364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1927870357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40f2114f9bdc42a41bd2b3daf0055c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  apostles:
+  - apostleBase: {fileID: 11400000, guid: 85c9e6af725b258469c37775f53acd41, type: 2}
+    level: 1
+    godApostle: 0
+  - apostleBase: {fileID: 11400000, guid: cc8656d8ef26bfb4984b91a65f7e37ea, type: 2}
+    level: 2
+    godApostle: 0
 --- !u!1 &1944892179
 GameObject:
   m_ObjectHideFlags: 0
@@ -5451,8 +5480,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wildApostles:
-  - {fileID: 11400000, guid: cc8656d8ef26bfb4984b91a65f7e37ea, type: 2}
-  - {fileID: 11400000, guid: 85c9e6af725b258469c37775f53acd41, type: 2}
+  - apostleBase: {fileID: 11400000, guid: 85c9e6af725b258469c37775f53acd41, type: 2}
+    level: 3
+    godApostle: 0
+  - apostleBase: {fileID: 11400000, guid: bf66142d2622f4e4a9b02a028f8f1d46, type: 2}
+    level: 4
+    godApostle: 0
   minLevel: 1
   maxLevel: 5
 --- !u!1 &2106494973

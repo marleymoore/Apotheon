@@ -17,6 +17,7 @@ public class MoveBase : ScriptableObject
     [SerializeField] int power;
     [SerializeField] int accuracy;
     [SerializeField] UniqueType uniqueMove;
+    [SerializeField] bool isSpecial;
 
     public string Name { get { return name; } }
 
@@ -29,4 +30,6 @@ public class MoveBase : ScriptableObject
     public int Accuracy { get { return accuracy; } }
 
     public UniqueType UniqueMove { get {  return uniqueMove; } }
+
+    public bool IsSpecial { get { return isSpecial; } }
 }
