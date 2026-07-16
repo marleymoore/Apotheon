@@ -197,6 +197,8 @@ public class BattleManager : MonoBehaviour
     IEnumerator PerformEnemyMove()
     {
         state = BattleState.EnemyMove;
+        battleDialogue.EnableMoveSelector(false);
+        battleDialogue.EnableDialogueText(true);
 
         var move = enemyUnit.Apostle.RandomMove();
         yield return battleDialogue.TypeDialogue($"{enemyUnit.Apostle.ApostleBase.Name} used {move.Base.Name}");
@@ -237,9 +239,9 @@ public class BattleManager : MonoBehaviour
             {
                 StartCoroutine(PlayerMoveSecond());
                 buttonHandler.ButtonReset();
-                yield return battleDialogue.TypeDialogue($"{playerUnit.Apostle.ApostleBase.Name} used {move.Base.Name}");
-                PlayerAction();
-                buttonHandler.ButtonReset();
+                //yield return battleDialogue.TypeDialogue($"{playerUnit.Apostle.ApostleBase.Name} used {move.Base.Name}");
+                //PlayerAction();
+                
             }
             
          
