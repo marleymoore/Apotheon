@@ -23,6 +23,7 @@ public class BattleManager : MonoBehaviour
     bool playerMoveFirst;
 
     bool inBattle = false;
+    bool isResolvingturn = false;
 
 
     BattleState state;
@@ -93,6 +94,7 @@ public class BattleManager : MonoBehaviour
 
     void PlayerAction()
     {
+        isResolvingturn = false;
         state = BattleState.PlayerAction;
         StartCoroutine(battleDialogue.TypeDialogue("Select an Action: "));
         battleDialogue.EnableActionSelector(true);
@@ -119,36 +121,37 @@ public class BattleManager : MonoBehaviour
         battleDialogue.EnableDialogueText(false);
         battleDialogue.EnableMoveSelector(true);
 
-
         buttonHandler.buttonList = new ButtonHandler.MyButton[4];
-        
-        buttonHandler.buttonList[0].image = GameObject.Find("Move1").GetComponent<Image>();
-        buttonHandler.buttonList[0].image.color = Color.yellow;
-        buttonHandler.buttonList[0].action = SelectMove;
-        
-        buttonHandler.buttonList[1].image = GameObject.Find("Move2").GetComponent<Image>();
-        buttonHandler.buttonList[1].image.color = Color.yellow;
-        buttonHandler.buttonList[1].action = SelectMove;
 
-        buttonHandler.buttonList[2].image = GameObject.Find("Move3").GetComponent<Image>();
-        buttonHandler.buttonList[2].image.color = Color.yellow;
-        buttonHandler.buttonList[2].action = SelectMove;
+        string[] moveButtonNames = { "Move1", "Move2", "Move3", "Move4" };
 
-        buttonHandler.buttonList[3].image = GameObject.Find("Move4").GetComponent<Image>();
-        buttonHandler.buttonList[3].image.color = Color.yellow;
-        buttonHandler.buttonList[3].action = SelectMove;
-
-        //buttonHandler.MakeButton(playerUnit.apostle.Moves, GameObject.Find("Move1"));
+        for (int i = 0; i < 4; i++)
+        {
+            int index = i; // IMPORTANT: local copy, don't capture the loop variable directly
+            buttonHandler.buttonList[i].image = GameObject.Find(moveButtonNames[i]).GetComponent<Image>();
+            buttonHandler.buttonList[i].image.color = Color.yellow;
+            buttonHandler.buttonList[i].action = () => SelectMove(index);
+        }
 
         battleDialogue.SetMoveNames(playerUnit.Apostle.Moves);
 
 
     }
 
-    void SelectMove()
-    { 
+    
 
-        if(playerUnit.Apostle.Speed > enemyUnit.Apostle.Speed)
+     int chosenMoveIndex;
+    
+
+
+    void SelectMove(int index)
+    {
+        if (isResolvingturn == true) return;
+        isResolvingturn = true;
+
+        chosenMoveIndex = index;
+
+        if (playerUnit.Apostle.Speed > enemyUnit.Apostle.Speed)
         {
             playerMoveFirst = true;
             StartCoroutine(PerformPlayerMove());
@@ -158,7 +161,6 @@ public class BattleManager : MonoBehaviour
             playerMoveFirst = false;
             StartCoroutine(PerformEnemyMove());
         }
-       // StartCoroutine(playerUnit.Apostle.Speed >= enemyUnit.Apostle.Speed ? PerformPlayerMove() : PerformEnemyMove());
     }
 
     IEnumerator PerformPlayerMove()
@@ -167,13 +169,14 @@ public class BattleManager : MonoBehaviour
 
         battleDialogue.EnableMoveSelector(false);
         battleDialogue.EnableDialogueText(true);
+
+
+
+        var move = playerUnit.Apostle.Moves[chosenMoveIndex];
+        yield return battleDialogue.TypeDialogue($"{playerUnit.Apostle.ApostleBase.Name} used {move.Base.Name}");
         buttonHandler.ButtonReset();
 
 
-        var move = playerUnit.Apostle.Moves[buttonHandler.selectedButton];
-        yield return battleDialogue.TypeDialogue($"{playerUnit.Apostle.ApostleBase.Name} used {move.Base.Name}");
-
-        
 
         //bool isFainted = enemyUnit.apostle.TakeDamage(move, playerUnit.apostle);
         //enemyHud.UpdateHPBar();
@@ -190,7 +193,7 @@ public class BattleManager : MonoBehaviour
         else
         {
             StartCoroutine(PerformEnemyMove());
-            buttonHandler.ButtonReset();
+            
         }
     }
 
@@ -201,9 +204,11 @@ public class BattleManager : MonoBehaviour
         battleDialogue.EnableDialogueText(true);
 
         var move = enemyUnit.Apostle.RandomMove();
+        buttonHandler.ButtonReset();
         yield return battleDialogue.TypeDialogue($"{enemyUnit.Apostle.ApostleBase.Name} used {move.Base.Name}");
-
        
+
+
 
         //bool isFainted = playerUnit.apostle.TakeDamage(move, playerUnit.apostle);
 
@@ -225,7 +230,7 @@ public class BattleManager : MonoBehaviour
                 playerHud.SetHudData(playerUnit.Apostle);
 
                 PlayerAction();
-                
+                buttonHandler.ButtonReset();
             }
             else 
             {
@@ -254,10 +259,11 @@ public class BattleManager : MonoBehaviour
 
         battleDialogue.EnableMoveSelector(false);
         battleDialogue.EnableDialogueText(true);
+
+
+
+        var move = playerUnit.Apostle.Moves[chosenMoveIndex];
         buttonHandler.ButtonReset();
-
-
-        var move = playerUnit.Apostle.Moves[buttonHandler.selectedButton];
         yield return battleDialogue.TypeDialogue($"{playerUnit.Apostle.ApostleBase.Name} used {move.Base.Name}");
 
 
@@ -292,6 +298,7 @@ public class BattleManager : MonoBehaviour
     void EndBattle()
     {
         inBattle = false;
+        isResolvingturn = false;
         GameState gameState = new GameState(inBattle, playerCamera, battleCamera, playerController);
         EventBus.Raise(gameState);
     }

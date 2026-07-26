@@ -15,7 +15,7 @@ MonoBehaviour:
   name: SuperSlam
   description: 
   type: 0
-  power: 20
+  power: 100
   accuracy: 100
   uniqueMove: 0
   isSpecial: 0

@@ -3689,7 +3689,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wildApostles:
-  - apostleBase: {fileID: 11400000, guid: 85c9e6af725b258469c37775f53acd41, type: 2}
+  - apostleBase: {fileID: 11400000, guid: cc8656d8ef26bfb4984b91a65f7e37ea, type: 2}
     level: 2
     godApostle: 0
   - apostleBase: {fileID: 11400000, guid: bf66142d2622f4e4a9b02a028f8f1d46, type: 2}
@@ -5480,11 +5480,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wildApostles:
-  - apostleBase: {fileID: 11400000, guid: 85c9e6af725b258469c37775f53acd41, type: 2}
-    level: 3
-    godApostle: 0
   - apostleBase: {fileID: 11400000, guid: bf66142d2622f4e4a9b02a028f8f1d46, type: 2}
-    level: 4
+    level: 5
     godApostle: 0
   minLevel: 1
   maxLevel: 5

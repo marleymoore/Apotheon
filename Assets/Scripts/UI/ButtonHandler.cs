@@ -10,7 +10,7 @@ public class ButtonHandler : MonoBehaviour
     public delegate void ButtonAction();
     public MyButton[] buttonList;
     public int selectedButton = 0;
-    ButtonHandler.MyButton[] newButtonList;
+    //ButtonHandler.MyButton[] newButtonList;
 
     public void MoveToNextButton()
     {
@@ -53,43 +53,59 @@ public class ButtonHandler : MonoBehaviour
 
      if (Input.GetKeyDown(KeyCode.DownArrow))
       {
-          MoveToNextButton();
-      }
+          MoveToNextButton();Debug.Log(buttonList[selectedButton]);
+            Debug.Log(selectedButton);
+        }
       else if (Input.GetKeyDown(KeyCode.UpArrow))
       {
          PreviousButton();
-      }
+            Debug.Log(selectedButton);
+        }
  
       if (Input.GetKeyDown(KeyCode.Space))
       {
           buttonList[selectedButton].action();
+           //buttonList[selectedButton].action = null;
+          
+          
       }
     }
 
-    public void DestroyList(ButtonHandler.MyButton[] button)
+    public void DestroyList(ButtonHandler.MyButton[] buttonList)
     {
-
+        foreach (ButtonHandler.MyButton button in buttonList)
+        {
+            if (button.image != null)
+            {
+                Destroy(button.image.gameObject);
+            }
+        }
     }
 
-   // private void Update()
-   // {
-   //     if (buttonList != null)
-   //     {
-   //         MenuNavigation(buttonList);
-   //         Debug.Log(buttonList);
-   //     }
-   // }
+    public void UselessAction()
 
-   // public void MakeButton(List<Move> moveList, GameObject buttonName)
-   // {
-   //    
-   //     for (int i = buttonList.Length; i < moveList.Count; i++)
-   //     {
-   //
-   //         buttonList[i].image = GameObject.FindGameObjectWithTag("MoveImage").GetComponent<Image>();
-   //         buttonList[i].image.color = Color.yellow;
-   //     }
-   //
-   //
-   // }
+    {
+        
+    }
+    // private void Update()
+    // {
+    //     if (buttonList != null)
+    //     {
+    //         MenuNavigation(buttonList);
+    //         Debug.Log(buttonList);
+    //     }
+    // }
+
+    // public void MakeButton(List<Move> moveList, GameObject buttonName)
+    // {
+    //    
+    //     for (int i = buttonList.Length; i < moveList.Count; i++)
+    //     {
+    //
+    //         buttonList[i].image = GameObject.FindGameObjectWithTag("MoveImage").GetComponent<Image>();
+    //         buttonList[i].image.color = Color.yellow;
+    //     }
+    //
+    //
+    // }
 }
