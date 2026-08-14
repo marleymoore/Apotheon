@@ -16,6 +16,7 @@ public class BattleHud : MonoBehaviour
     private void Awake()
     {
         EventBus.Subscribe<TakeDamage>(UpdateHPBar);
+        EventBus.Subscribe<CleanUpEffects>(UpdateHPBar);
     }
 
     public void SetHudData(Apostle apostle)
@@ -32,10 +33,10 @@ public class BattleHud : MonoBehaviour
         hpBar.SetHp((float)Apostle.CurrentHP / Apostle.MaxHp);
     }
 
-   // public void UpdateHPBar()
-   // {
-   //     hpBar.SetHp((float)_apostle.currentHP / _apostle.MaxHp);
-   // }
+    // public void UpdateHPBar()
+    // {
+    //     hpBar.SetHp((float)_apostle.currentHP / _apostle.MaxHp);
+    // }
 
 
 }

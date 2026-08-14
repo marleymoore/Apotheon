@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a164ee44c6edf8f42aade9ba50e488b8, type: 3}
-  m_Name: SuperSlam
+  m_Name: DblHit
   m_EditorClassIdentifier: 
-  name: SuperSlam
+  name: dblHit
   description: 
   type: 0
-  power: 100
+  power: 10
   accuracy: 100
-  uniqueMove: 0
+  effectType: 2
   isSpecial: 0
-  hasEffect: 0
+  hasEffect: 1

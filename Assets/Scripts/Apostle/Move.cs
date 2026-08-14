@@ -1,32 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Move
 {
-    // Start is called before the first frame update
     public MoveBase Base { get; set; }
 
-    public UniqueType type;
-    public UniqueType UniqueType { get { return type; } }
+    public Effect type;
+    //public Effect UniqueType { get { return type; } }
     public Move(MoveBase aBase)
     {
         Base = aBase;
+        type = aBase.EffectType;
     }
 
-    void CUM()
-    {
-        type = new UniqueType();
-
-        if(type == UniqueType.Heal)
-        {
-            
-        }
-    }
 }
 
-public enum UniqueType
+public enum Effect
 {
     None,
-    Heal
+    Heal,
+    DoubleHit,
+    Poison
 }

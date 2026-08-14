@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Move", menuName = "Apostle/Create New Move")]
@@ -16,8 +17,10 @@ public class MoveBase : ScriptableObject
     [SerializeField] ApostleType type;
     [SerializeField] int power;
     [SerializeField] int accuracy;
-    [SerializeField] UniqueType uniqueMove;
+    [SerializeField] Effect effectType;
     [SerializeField] bool isSpecial;
+    [SerializeField] bool hasEffect;
+
 
     public string Name { get { return name; } }
 
@@ -29,7 +32,10 @@ public class MoveBase : ScriptableObject
 
     public int Accuracy { get { return accuracy; } }
 
-    public UniqueType UniqueMove { get {  return uniqueMove; } }
+    public Effect EffectType { get {  return effectType; } }
 
     public bool IsSpecial { get { return isSpecial; } }
+
+    public bool Haseffect { get { return hasEffect; } }
+
 }

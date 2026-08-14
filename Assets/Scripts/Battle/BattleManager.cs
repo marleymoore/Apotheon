@@ -66,7 +66,7 @@ public class BattleManager : MonoBehaviour
         
 
 
-        Debug.Log(playerUnit.Apostle.Moves);
+        //Debug.Log(playerUnit.Apostle.Moves);
 
         StartCoroutine(BattleStart());
       
@@ -94,6 +94,7 @@ public class BattleManager : MonoBehaviour
 
     void PlayerAction()
     {
+        StopCoroutine(CleanUp());
         isResolvingturn = false;
         state = BattleState.PlayerAction;
         StartCoroutine(battleDialogue.TypeDialogue("Select an Action: "));
@@ -117,18 +118,20 @@ public class BattleManager : MonoBehaviour
     void PlayerMove()
     {
         state = BattleState.PlayerMove;
+
         battleDialogue.EnableActionSelector(false);
         battleDialogue.EnableDialogueText(false);
         battleDialogue.EnableMoveSelector(true);
 
         buttonHandler.buttonList = new ButtonHandler.MyButton[4];
 
-        string[] moveButtonNames = { "Move1", "Move2", "Move3", "Move4" };
+
+        GameObject[] moveButtonNames = GameObject.FindGameObjectsWithTag("MoveImage"); //TO DO: needs work here, when second player apostle comes out needs to change moves
 
         for (int i = 0; i < 4; i++)
         {
             int index = i; // IMPORTANT: local copy, don't capture the loop variable directly
-            buttonHandler.buttonList[i].image = GameObject.Find(moveButtonNames[i]).GetComponent<Image>();
+            buttonHandler.buttonList[i].image = moveButtonNames[i].GetComponent<Image>();
             buttonHandler.buttonList[i].image.color = Color.yellow;
             buttonHandler.buttonList[i].action = () => SelectMove(index);
         }
@@ -138,9 +141,9 @@ public class BattleManager : MonoBehaviour
 
     }
 
-    
 
-     int chosenMoveIndex;
+
+    int chosenMoveIndex;
     
 
 
@@ -182,7 +185,7 @@ public class BattleManager : MonoBehaviour
         //enemyHud.UpdateHPBar();
 
         TakeDamage damageTaken = new TakeDamage(move, playerUnit.Apostle, enemyUnit.Apostle);
-        EventBus.Raise(damageTaken);
+        //EventBus.Raise(damageTaken);
 
         if (enemyUnit.Apostle.CurrentHP <= 0)
         {
@@ -213,7 +216,8 @@ public class BattleManager : MonoBehaviour
         //bool isFainted = playerUnit.apostle.TakeDamage(move, playerUnit.apostle);
 
         TakeDamage damageTaken = new TakeDamage(move, enemyUnit.Apostle, playerUnit.Apostle);
-        EventBus.Raise(damageTaken);
+       // EventBus.Raise(damageTaken);
+
 
 
         //playerHud.UpdateHPBar();
@@ -228,7 +232,8 @@ public class BattleManager : MonoBehaviour
             {
                 playerUnit.SetUp(nextApostle, true, nextApostle.Level);
                 playerHud.SetHudData(playerUnit.Apostle);
-
+                battleDialogue.EnableActionSelector(true);
+                
                 PlayerAction();
                 buttonHandler.ButtonReset();
             }
@@ -272,7 +277,7 @@ public class BattleManager : MonoBehaviour
         //enemyHud.UpdateHPBar();
 
         TakeDamage damageTaken = new TakeDamage(move, playerUnit.Apostle, enemyUnit.Apostle);
-        EventBus.Raise(damageTaken);
+        //EventBus.Raise(damageTaken);
 
         if (enemyUnit.Apostle.CurrentHP <= 0)
         {
@@ -282,13 +287,32 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            PlayerAction();
+
+            StartCoroutine(CleanUp());
             buttonHandler.ButtonReset();
         }
     }
+
+    IEnumerator CleanUp()
+    {
+        if (playerUnit.Apostle.IsAffected == true)
+        {
+            yield return battleDialogue.TypeDialogue($"{playerUnit.Apostle.ApostleBase.Name} is {playerUnit.Apostle.CurrentStatusEffect}!!!");
+            CleanUpEffects cleanUpEffects = new CleanUpEffects(playerUnit.Apostle);
+            EventBus.Raise(cleanUpEffects);
+        }
+        if (enemyUnit.Apostle.IsAffected == true)
+        {
+            yield return battleDialogue.TypeDialogue($"{enemyUnit.Apostle.ApostleBase.Name} is {enemyUnit.Apostle.CurrentStatusEffect}!!!");
+            CleanUpEffects cleanUpEffects = new CleanUpEffects(enemyUnit.Apostle);
+            EventBus.Raise(cleanUpEffects);
+            
+        }
+        PlayerAction();
+    }
     void Flee()
     {
-        Debug.Log("hello");
+       // Debug.Log("hello");
         inBattle = false;
         GameState gameState = new GameState(inBattle, playerCamera, battleCamera, playerController);
         EventBus.Raise(gameState);
@@ -302,6 +326,8 @@ public class BattleManager : MonoBehaviour
         GameState gameState = new GameState(inBattle, playerCamera, battleCamera, playerController);
         EventBus.Raise(gameState);
     }
+
+
 
     private void Update()
     {

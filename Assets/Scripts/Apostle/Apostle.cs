@@ -13,11 +13,18 @@ public class Apostle
     [SerializeField] ApostleBase apostleBase;
     [SerializeField] int level;
     [SerializeField] bool godApostle = false;
-
+    
+    BattleDialogue battleDialogue;
 
     public int CurrentHP {  get; set; }
     public ApostleBase ApostleBase { get { return apostleBase; } }
     public int Level { get { return level; } }
+
+    public StatusEffect CurrentStatusEffect { get; set; }
+
+    public bool IsAffected { get; set; }
+
+    
 
     public List<Move> Moves { get; set; }
 
@@ -76,6 +83,22 @@ public class Apostle
     {
         int r = Random.Range(0, Moves.Count);
         return Moves[r];
+    }
+
+    public enum StatusEffect
+    {
+        none,
+        poisoned
+    }
+
+    public void SetStatusEffects(Apostle apostle, Effect effect)
+    {
+        IsAffected = true;
+        if (effect == Effect.Poison)
+        {
+            CurrentStatusEffect = StatusEffect.poisoned;
+        }
+
     }
 
 }
