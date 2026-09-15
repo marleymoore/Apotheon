@@ -15,7 +15,7 @@ public class BattleUnit : MonoBehaviour
     public void SetUp(Apostle encounteredApostle, bool isPlayerUnit, int level)
     {
 
-
+ 
         //encounterList = GetComponent<EncounterList>();
 
         Apostle = encounteredApostle;

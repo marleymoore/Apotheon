@@ -13,10 +13,10 @@ public class Apostle
     [SerializeField] ApostleBase apostleBase;
     [SerializeField] int level;
     [SerializeField] bool godApostle = false;
-    
+
     BattleDialogue battleDialogue;
 
-    public int CurrentHP {  get; set; }
+    public int CurrentHP { get; set; }
     public ApostleBase ApostleBase { get { return apostleBase; } }
     public int Level { get { return level; } }
 
@@ -24,7 +24,7 @@ public class Apostle
 
     public bool IsAffected { get; set; }
 
-    
+
 
     public List<Move> Moves { get; set; }
 
@@ -51,7 +51,7 @@ public class Apostle
                 break;
         }
 
-        
+
     }
 
 
@@ -63,22 +63,22 @@ public class Apostle
     public int SpDefence { get { return Mathf.FloorToInt((ApostleBase.SpDefence * Level) / 100f) + 10; } }
     public int Speed { get { return Mathf.FloorToInt((ApostleBase.Speed * Level) / 100f) + 10; } }
 
- //  public bool TakeDamage(Move move, Apostle attacker)
- //  {
- //      float a = (2 * attacker.Level + 10) / 250f;
- //      float b = a * move.Base.Power * ((float)attacker.Attack / Defence) + 2;
- //      int damage = Mathf.FloorToInt(b);
- //
- //      currentHP -= damage;
- //      if(currentHP <= 0)
- //      {
- //          currentHP = 0;
- //          return true;
- //      }
- //
- //      return false;
- //  }
- //
+    //  public bool TakeDamage(Move move, Apostle attacker)
+    //  {
+    //      float a = (2 * attacker.Level + 10) / 250f;
+    //      float b = a * move.Base.Power * ((float)attacker.Attack / Defence) + 2;
+    //      int damage = Mathf.FloorToInt(b);
+    //
+    //      currentHP -= damage;
+    //      if(currentHP <= 0)
+    //      {
+    //          currentHP = 0;
+    //          return true;
+    //      }
+    //
+    //      return false;
+    //  }
+    //
     public Move RandomMove()
     {
         int r = Random.Range(0, Moves.Count);
@@ -100,5 +100,6 @@ public class Apostle
         }
 
     }
+
 
 }

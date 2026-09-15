@@ -9,18 +9,28 @@ using UnityEngine.UI;
 public class TakeDamage : EventData
 {
     GameObject dialogueBox = GameObject.FindGameObjectWithTag("BattleDialogue");
-    GameObject hpBar = GameObject.FindGameObjectWithTag("HUD");
+    BattleDialogue battleDialogue;
+    //GameObject hpBar = GameObject.FindGameObjectWithTag("HUD");
 
-  
-
+    public Move move;
+    public Apostle attacker;
+    public Apostle defender;
     public TakeDamage(Move move, Apostle attacker, Apostle defender)
     {
+        this.move = move;
+        this.attacker = attacker;
+        this.defender = defender;
+        battleDialogue = dialogueBox.GetComponent<BattleDialogue>();
+    }
+
+    public IEnumerator Execute()
+    {
+
+
+
         CalculateDamage(move, attacker, defender);
-        BattleDialogue battleDialogue = dialogueBox.GetComponent<BattleDialogue>();
-        
-       // if (dialogueBox == null) Debug.LogError("BattleDialogue tag not found or object inactive!");
 
-
+        VoidEvent healthUpdate = new VoidEvent();
         if (move.Base.Haseffect == true)
         {
 
@@ -28,38 +38,82 @@ public class TakeDamage : EventData
             switch (move.type)
             {
                 case Effect.Heal:
-                {
+                    {
                         int heal = attacker.MaxHp / 4;
 
                         attacker.CurrentHP += heal;
                         if (attacker.CurrentHP > attacker.MaxHp) attacker.CurrentHP = attacker.MaxHp;
+                        EventBus.Raise(healthUpdate);
                         break;
-                }
+                    }
                 case Effect.DoubleHit:
                     {
 
-                        battleDialogue.StartCoroutine(HandleMultiAttack(attacker, defender, move, 1));
-                        
+                        //battleDialogue.StartCoroutine(HandleMultiAttack(attacker, defender, move, 1));
+                        yield return battleDialogue.StartCoroutine(HandleMultiAttack(attacker, defender, move, 1));
+
                         break;
                     }
                 case Effect.Poison:
                     {
+                        Debug.Log("IM CALLED");
                         defender.SetStatusEffects(defender, Effect.Poison);
                         break;
                     }
             }
-            // if(move.type == Effect.Heal)
-            // {
-            //     int heal = attacker.MaxHp / 4;
-            //
-            //     attacker.CurrentHP += heal;
-            //
-            //     if (attacker.CurrentHP > attacker.MaxHp) attacker.CurrentHP = attacker.MaxHp;
-            //    
-            // }
         }
-         
     }
+
+
+
+    // public TakeDamage(Move move, Apostle attacker, Apostle defender)
+    // {
+    //     CalculateDamage(move, attacker, defender);
+    //     BattleDialogue battleDialogue = dialogueBox.GetComponent<BattleDialogue>();
+    //     
+    //    // if (dialogueBox == null) Debug.LogError("BattleDialogue tag not found or object inactive!");
+    //
+    //
+    //     if (move.Base.Haseffect == true)
+    //     {
+    //
+    //
+    //         switch (move.type)
+    //         {
+    //             case Effect.Heal:
+    //             {
+    //                     int heal = attacker.MaxHp / 4;
+    //
+    //                     attacker.CurrentHP += heal;
+    //                     if (attacker.CurrentHP > attacker.MaxHp) attacker.CurrentHP = attacker.MaxHp;
+    //                     break;
+    //             }
+    //             case Effect.DoubleHit:
+    //                 {
+    //
+    //                     //battleDialogue.StartCoroutine(HandleMultiAttack(attacker, defender, move, 1));
+    //                     battleDialogue.StartCoroutine(HandleMultiAttack(attacker, defender, move, 1));
+    //             
+    //                     break;
+    //                 }
+    //             case Effect.Poison:
+    //                 {
+    //                     defender.SetStatusEffects(defender, Effect.Poison);
+    //                     break;
+    //                 }
+    //         }
+    //         // if(move.type == Effect.Heal)
+    //         // {
+    //         //     int heal = attacker.MaxHp / 4;
+    //         //
+    //         //     attacker.CurrentHP += heal;
+    //         //
+    //         //     if (attacker.CurrentHP > attacker.MaxHp) attacker.CurrentHP = attacker.MaxHp;
+    //         //    
+    //         // }
+    //     }
+    //      
+    // }
 
     void CalculateDamage(Move move, Apostle attacker, Apostle defender)
     {
@@ -115,6 +169,6 @@ public class TakeDamage : EventData
             if(defender.CurrentHP <= 0) break;
             
         }
-       
+        
     }
 }

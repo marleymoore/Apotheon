@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: SuperSlam
   description: 
-  type: 0
+  type: 2
   power: 100
   accuracy: 100
-  uniqueMove: 0
+  effectType: 0
   isSpecial: 0
   hasEffect: 0

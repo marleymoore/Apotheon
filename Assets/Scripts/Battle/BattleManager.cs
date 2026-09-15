@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -177,15 +178,20 @@ public class BattleManager : MonoBehaviour
 
         var move = playerUnit.Apostle.Moves[chosenMoveIndex];
         yield return battleDialogue.TypeDialogue($"{playerUnit.Apostle.ApostleBase.Name} used {move.Base.Name}");
+        
         buttonHandler.ButtonReset();
 
-
-
+        
         //bool isFainted = enemyUnit.apostle.TakeDamage(move, playerUnit.apostle);
         //enemyHud.UpdateHPBar();
+      
 
         TakeDamage damageTaken = new TakeDamage(move, playerUnit.Apostle, enemyUnit.Apostle);
+        yield return battleDialogue.StartCoroutine(damageTaken.Execute());
+        
         //EventBus.Raise(damageTaken);
+
+
 
         if (enemyUnit.Apostle.CurrentHP <= 0)
         {
@@ -195,10 +201,19 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
+
             StartCoroutine(PerformEnemyMove());
             
         }
     }
+
+   // IEnumerator CheckAttack(Move move)
+   // {
+   //     if (move.type == Effect.DoubleHit)
+   //     {
+   //
+   //     }
+   // }
 
     IEnumerator PerformEnemyMove()
     {
@@ -216,7 +231,8 @@ public class BattleManager : MonoBehaviour
         //bool isFainted = playerUnit.apostle.TakeDamage(move, playerUnit.apostle);
 
         TakeDamage damageTaken = new TakeDamage(move, enemyUnit.Apostle, playerUnit.Apostle);
-       // EventBus.Raise(damageTaken);
+        yield return battleDialogue.StartCoroutine(damageTaken.Execute());
+        // EventBus.Raise(damageTaken);
 
 
 
@@ -251,9 +267,15 @@ public class BattleManager : MonoBehaviour
                 buttonHandler.ButtonReset();
                 //yield return battleDialogue.TypeDialogue($"{playerUnit.Apostle.ApostleBase.Name} used {move.Base.Name}");
                 //PlayerAction();
+
+            }
+            else
+            {
+
+                StartCoroutine(CleanUp());
+               // buttonHandler.ButtonReset();
                 
             }
-            
          
         }
     }
@@ -277,6 +299,7 @@ public class BattleManager : MonoBehaviour
         //enemyHud.UpdateHPBar();
 
         TakeDamage damageTaken = new TakeDamage(move, playerUnit.Apostle, enemyUnit.Apostle);
+        yield return battleDialogue.StartCoroutine(damageTaken.Execute());
         //EventBus.Raise(damageTaken);
 
         if (enemyUnit.Apostle.CurrentHP <= 0)
@@ -323,6 +346,7 @@ public class BattleManager : MonoBehaviour
     {
         inBattle = false;
         isResolvingturn = false;
+        enemyUnit.Apostle.SetStatusEffects(enemyUnit.Apostle, Effect.None);
         GameState gameState = new GameState(inBattle, playerCamera, battleCamera, playerController);
         EventBus.Raise(gameState);
     }

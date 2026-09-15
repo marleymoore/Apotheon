@@ -17,6 +17,7 @@ public class BattleHud : MonoBehaviour
     {
         EventBus.Subscribe<TakeDamage>(UpdateHPBar);
         EventBus.Subscribe<CleanUpEffects>(UpdateHPBar);
+        EventBus.Subscribe<VoidEvent>(UpdateHPBar);
     }
 
     public void SetHudData(Apostle apostle)
