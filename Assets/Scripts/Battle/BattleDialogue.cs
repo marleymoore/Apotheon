@@ -13,6 +13,7 @@ public class BattleDialogue : MonoBehaviour
     [SerializeField] GameObject actionSelector;
     [SerializeField] GameObject moveSelector;
     [SerializeField] GameObject moveDetails;
+    [SerializeField] GameObject hitRadial;
 
     [SerializeField] List<TextMeshProUGUI> actionTexts;
     [SerializeField] List<TextMeshProUGUI> moveTexts;
@@ -45,6 +46,11 @@ public class BattleDialogue : MonoBehaviour
     {
         moveSelector.SetActive(enable);
         moveDetails.SetActive(enable);
+    }
+
+    public void EnableHitRadial(bool enable)
+    {
+        hitRadial.SetActive(enable);
     }
 
     public void EnableDialogueText(bool enable)

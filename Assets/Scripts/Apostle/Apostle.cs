@@ -98,6 +98,11 @@ public class Apostle
         {
             CurrentStatusEffect = StatusEffect.poisoned;
         }
+        if (effect == Effect.None)
+        {
+            IsAffected = false;
+            CurrentStatusEffect = StatusEffect.none;
+        }
 
     }
 

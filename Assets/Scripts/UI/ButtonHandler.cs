@@ -54,12 +54,12 @@ public class ButtonHandler : MonoBehaviour
      if (Input.GetKeyDown(KeyCode.DownArrow))
      {
           MoveToNextButton();Debug.Log(buttonList[selectedButton]);
-            Debug.Log(selectedButton);
+           // Debug.Log(selectedButton);
      }
       else if (Input.GetKeyDown(KeyCode.UpArrow))
       {
          PreviousButton();
-            Debug.Log(selectedButton);
+           // Debug.Log(selectedButton);
       }
  
       if (Input.GetKeyDown(KeyCode.Space))

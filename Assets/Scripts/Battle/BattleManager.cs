@@ -187,7 +187,8 @@ public class BattleManager : MonoBehaviour
       
 
         TakeDamage damageTaken = new TakeDamage(move, playerUnit.Apostle, enemyUnit.Apostle);
-        yield return battleDialogue.StartCoroutine(damageTaken.Execute());
+        yield return battleDialogue.StartCoroutine(damageTaken.AttackQTE());
+       // yield return battleDialogue.StartCoroutine(damageTaken.Execute());
         
         //EventBus.Raise(damageTaken);
 
@@ -299,7 +300,8 @@ public class BattleManager : MonoBehaviour
         //enemyHud.UpdateHPBar();
 
         TakeDamage damageTaken = new TakeDamage(move, playerUnit.Apostle, enemyUnit.Apostle);
-        yield return battleDialogue.StartCoroutine(damageTaken.Execute());
+        yield return battleDialogue.StartCoroutine(damageTaken.AttackQTE());
+        //yield return battleDialogue.StartCoroutine(damageTaken.Execute());
         //EventBus.Raise(damageTaken);
 
         if (enemyUnit.Apostle.CurrentHP <= 0)
@@ -335,7 +337,8 @@ public class BattleManager : MonoBehaviour
     }
     void Flee()
     {
-       // Debug.Log("hello");
+        // Debug.Log("hello");
+        enemyUnit.Apostle.SetStatusEffects(enemyUnit.Apostle, Effect.None);
         inBattle = false;
         GameState gameState = new GameState(inBattle, playerCamera, battleCamera, playerController);
         EventBus.Raise(gameState);
@@ -344,9 +347,10 @@ public class BattleManager : MonoBehaviour
 
     void EndBattle()
     {
+        
+        enemyUnit.Apostle.SetStatusEffects(enemyUnit.Apostle, Effect.None);
         inBattle = false;
         isResolvingturn = false;
-        enemyUnit.Apostle.SetStatusEffects(enemyUnit.Apostle, Effect.None);
         GameState gameState = new GameState(inBattle, playerCamera, battleCamera, playerController);
         EventBus.Raise(gameState);
     }

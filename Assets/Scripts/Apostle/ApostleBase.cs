@@ -26,6 +26,7 @@ public class ApostleBase : ScriptableObject
     [SerializeField] int spDefence;
     [SerializeField] int speed;
 
+
     [SerializeField] List<LearnableMoves> learnableMoves;
 
     public string Name { get { return name; } }

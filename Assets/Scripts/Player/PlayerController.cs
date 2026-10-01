@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -35,6 +36,9 @@ public class PlayerController : MonoBehaviour
         pDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
         pBody.velocity = pDirection * pMoveSpeed;
 
+        float result = Normalize(35, 5, 100);
+        Debug.Log(result);
+
        // isMoving = pBody.velocity.magnitude > 0 ? true : false;
        //
        // if(isMoving == true && encounterEnable == true)
@@ -42,6 +46,11 @@ public class PlayerController : MonoBehaviour
        //     Encounter encounter = new Encounter(Random.Range(1, 101), 2f);
        //     EventBus.Raise(encounter);
        // }
+    }
+
+    public static float Normalize(float accuracy, float minAcc, float maxAcc)
+    {
+        return Mathf.Clamp01((accuracy - minAcc) / (maxAcc - minAcc));
     }
 
     /* BEGIN ENCOUNTER
